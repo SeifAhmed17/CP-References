@@ -1,6 +1,5 @@
 namespace Combinatorics
 {
-    using ll = long long;
     ll mod;
     vector<ll> fact, InvFact;
 
