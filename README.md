@@ -2,6 +2,9 @@
 
 📘 A personal collection of competitive programming snippets for contests.
 
+## 📂 Math and Number Theory
+- [Combinatorics (nCr, nPr, factorials mod)](./MathAndNumberTheory/combinatorics.cpp)
+
 ## Categories
 - [Number Theory](./NumberTheory)
 - [Combinatorics](./Combinatorics)
