@@ -1,29 +1,24 @@
-namespace dsu
+namespace DSU
 {
-    int sz; vector<int> p, len;
+    int sz; vector<int> par, len;
 
     void init(int n)
     {
-        sz = n+1;
-        p.resize(sz); len.resize(sz, 1);
-        iota(p.begin(), p.end(), 0);
+        sz = n+3;
+        par.assign(sz, 0), len.assign(sz, 1);
+        iota(all(par), 0);
     }
 
-    int find(int v) {
-        if (p[v] == v) return v;
-        return p[v] = find(p[v]);
+    int find(int u) {
+        return par[u] == u ? u : par[u] = find(par[u]);
     }
 
-    void unite(int u, int v) {
+    bool merge(int u, int v) {
         u = find(u), v = find(v);
-        if (u == v) return;
-        if (len[v] > len[u]) swap(u, v);
-        p[u] = v;
-        len[v] += len[u];
-    }
-
-    bool sameGroup(int u, int v) {
-        return find(u) == find(v);
+        if (u == v) return false;
+        if (len[u] < len[v]) swap(u, v);
+        par[v] = u, len[u] += len[v];
+        return true;
     }
 }
-using namespace dsu;
+using namespace DSU;
