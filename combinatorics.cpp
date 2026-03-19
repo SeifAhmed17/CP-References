@@ -1,5 +1,6 @@
-namespace Combinatorics
+class Combinatorics
 {
+public:
     ll mod;
     vector<ll> fact, InvFact;
 
@@ -46,5 +47,3 @@ namespace Combinatorics
         return Mul(nPr(n,r), InvFact[r]);
     }
 };
-
-using namespace Combinatorics;
