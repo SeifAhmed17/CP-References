@@ -1,38 +1,21 @@
-struct Node {
-    int val;
-    Node(int x = 0) : val(x) {}
-};
-
 class SegmentTree {
-private:
+
+    struct Node {
+        int val;
+        Node(int x = 0) : val(x) {}
+    };
+
     int TREESIZE;
     vector<Node> tree;
 
     Node merge(const Node& nl, const Node& nr) { return Node(nl.val + nr.val); }
 
-    void Build(const vector<int> &a, int idx, int lx, int rx) {
-        if (lx == rx) {
-            if (lx < (int)a.size()) tree[idx] = Node(a[lx]);
-            else tree[idx] = Node();
-            return;
-        }
-
-        int mid = (lx + rx) >> 1;
-        Build(a, 2*idx+1, lx, mid);
-        Build(a, 2*idx+2, mid+1, rx);
-
-        tree[idx] = merge(tree[2*idx+1], tree[2*idx+2]);
-    }
-
     Node query(int l, int r, int idx, int lx, int rx) {
-        if (lx >= l && rx <= r) return tree[idx];
         if (rx < l || lx > r) return Node();
+        if (lx >= l && rx <= r) return tree[idx];
 
         int mid = (lx + rx) >> 1;
-        Node nLeft = query(l, r, 2*idx+1, lx, mid);
-        Node nRight = query(l, r, 2*idx+2, mid+1, rx);
-
-        return merge(nLeft, nRight);
+        return merge(query(l, r, 2*idx+1, lx, mid), query(l, r, 2*idx+2, mid+1, rx));
     }
 
     void update(int pos, int newVal, int idx, int lx, int rx) {
@@ -49,11 +32,13 @@ private:
     }
 
 public:
-    SegmentTree(const vector<int> &a) {
+
+    SegmentTree(){}
+
+    void init(const int& n) {
         TREESIZE = 1;
-        while (TREESIZE < (int)a.size()) TREESIZE <<= 1;
-        tree.resize(2 * TREESIZE);
-        Build(a, 0, 0, TREESIZE-1);
+        while (TREESIZE < n) TREESIZE <<= 1;
+        tree.assign(4 * TREESIZE, Node());
     }
 
     int query(int l, int r) { return query(l, r, 0, 0, TREESIZE-1).val; }
