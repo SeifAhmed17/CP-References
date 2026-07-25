@@ -1,6 +1,7 @@
 int n, timer, sz[N], in[N], tree[N], big[N], head[N], par[N], lvl[N];
 vector<int> adj[N];
 
+// If edge queries, store the values no the deeper node.
 void dfs0(int u, int p) {
     sz[u] = 1;
     big[u] = -1;
@@ -33,6 +34,7 @@ vector<pair<int,int>> getRanges(int u, int v) {
         if (head[u] == head[v]) {
             if (lvl[u] > lvl[v]) swap(u, v);
             ranges.emplace_back(in[u], in[v]);
+            // if (u != v) ranges.emplace_back(in[u] + 1, in[v]); If edge queries.
             break;
         }
 
