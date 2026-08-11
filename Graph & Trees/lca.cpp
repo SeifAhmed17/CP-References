@@ -1,51 +1,37 @@
-class LCA
-{
-    int nSize, logSize, root;
-    vector<vector<int>>anc;
-    vector<int> lvl;
 
-    void Build(int u, int p, vector<vector<int>>& adj) {
-        
-        for (auto v : adj[u]) {
-            if (v == p) continue;
+int n, LOG;
+vector<vector<int>>anc(LOG, vector<int>(n)), adj(n);
+vector<int> lvl(n);
 
-            lvl[v] = lvl[u] + 1;
-            anc[0][v] = u;
+void dfs0(int u, int p) {
+    
+    for (auto v : adj[u]) if (v != p) {
 
-            for (int k=1; k<logSize; k++)
-                anc[k][v] = anc[k-1][anc[k-1][v]];
+        lvl[v] = lvl[u] + 1;
+        anc[0][v] = u;
 
-            Build(v, u, adj);
-        }
+        for (int k=1; k<LOG; k++)
+            anc[k][v] = anc[k-1][anc[k-1][v]];
+
+        dfs0(v, u);
     }
+}
 
-public:
-    LCA(int n, int r, vector<vector<int>>& adj): root(r), nSize(n+17), logSize(__lg(nSize)+2) {
-        anc = vector<vector<int>>(logSize, vector<int>(nSize, root));
-        lvl = vector<int>(nSize, 0);
-        Build(r, r, adj);
-    }
 
-    int KthAncestor(int u, int k) {
-        for (int i=logSize-1; i>=0; i--) {
-            if (k >> i & 1)
-                u = anc[i][u];
-        }
-        return u;
-    }
+int kth_anc(int k, int u) {
+    for(int i=0; i<LOG; i++) if(k >> i & 1) u = anc[i][u];
+    return u;
+}    
 
-    int get_lca(int u, int v) {
-        if (lvl[v] > lvl[u]) swap(v, u);
+int get_lca(int u, int v){
+    if (lvl[u] > lvl[v]) swap(u, v);
+    v = kth_anc(lvl[v]-lvl[u], v);
+    if(u == v) return u;
 
-        u = KthAncestor(u, lvl[u]-lvl[v]);
+    for(int i=LOG-1; i>=0; i--) 
+        if(anc[i][u] != anc[i][v])
+            u = anc[i][u], v = anc[i][v];
 
-        if (u == v) return u;
+    return anc[0][u];
+}
 
-        for (int i=logSize-1; i>=0; i--) {
-            if (anc[i][u] != anc[i][v])
-                u = anc[i][u], v = anc[i][v];
-        }
-
-        return anc[0][u];
-    }
-};

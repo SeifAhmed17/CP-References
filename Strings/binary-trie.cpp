@@ -17,7 +17,7 @@ public:
         Node* cur = root;
         for (int i=MAXBITS; i>=0; i--) {
             bool c = n>>i&1;
-            if (cur->child[c] == nullptr) cur->child[c] = new Node();
+            if (cur->child[c] == NULL) cur->child[c] = new Node();
             cur->freq[c]++;
             cur = cur->child[c];
         }
@@ -33,7 +33,7 @@ public:
 
         if (!cur->freq[c]) {
             delete cur->child[c];
-            cur->child[c] = nullptr;
+            cur->child[c] = NULL;
         }
     }
 
