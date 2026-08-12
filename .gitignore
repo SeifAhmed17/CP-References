@@ -1,0 +1,9 @@
+# IDE configs
+.idea/
+.vscode/
+*.iml
+
+# compiled junk
+*.exe
+*.o
+*.out
