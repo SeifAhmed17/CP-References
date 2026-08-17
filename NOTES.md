@@ -2,6 +2,22 @@
 
 Quick facts that solve or unlock problems. (Code lives in the folders; see README index.)
 
+## Setup & don't-forget
+
+- **Fast IO** — first lines of main: `ios_base::sync_with_stdio(false); cin.tie(nullptr);` — after this NEVER mix in `scanf`/`printf`.
+- `'\n'` not `endl` (endl flushes = slow in loops). **Exception: interactive problems** — there you MUST flush every query (`endl` or `cout.flush()`).
+- **Interactive protocol**: `cout << "? " << x << endl;` then read the reply — `endl` everywhere, no buffering games. Note `cin.tie(nullptr)` disables the auto-flush-before-read, so with fast IO every un-flushed query = guaranteed idleness TLE.
+- If the judge replies `-1` (or anything out of protocol) → `exit(0)` **immediately**: you exceeded the query budget or sent garbage, and looping on turns a clean WA into a confusing TLE.
+- Finish with `! answer` + flush; count queries against the budget first (it's usually ~log₂n — an off-by-one loop bound is the classic interactive WA).
+- Multi-test skeleton: `int t; cin >> t; while (t--) solve();` — **reset globals/arrays inside solve()**, half of all WAs on test 2 are stale state.
+- Real-number answers: `cout << fixed << setprecision(10);` — default prints 6 significant digits and truncates big values into scientific notation.
+- Overflow: `1e5 * 1e5` overflows int **silently** — cast first: `(ll)a * b`. Shifts: `1LL << k`, not `1 << k`, for k ≥ 31. Constants: `const ll INF = 4e18;` (int max ~2.1e9).
+- Big arrays **global**, never inside main — local ones overflow the stack. Same for recursion deeper than ~1e5 on some judges.
+- `v.size()` is unsigned: `v.size() - 1` on an empty vector = huge number — write `(int)v.size()`.
+- `sort` comparator must be **strict** (`<`, never `<=`) — a non-strict one is undefined behavior (can RE, not just missort).
+- Read until EOF: `while (cin >> x) { ... }`. File IO when the judge wants it: `freopen("in.txt", "r", stdin); freopen("out.txt", "w", stdout);`
+- Compile: `g++ -O2 -std=c++17 a.cpp -o a` — while debugging add `-g -fsanitize=address,undefined` (catches overflow, out-of-bounds, UB at runtime).
+
 ## Number theory
 
 - The number of divisors of N is **odd iff N is a perfect square** (divisors pair up except √N). → `Number Theory/divisors.cpp`
@@ -23,6 +39,26 @@ Quick facts that solve or unlock problems. (Code lives in the folders; see READM
 - Count of numbers in [l, r] with a given bit set: O(1) per bit. → `Other/bit-tricks.cpp`
 - Prefix XOR 1^2^...^n is periodic mod 4: **n, 1, n+1, 0** for n % 4 = 0, 1, 2, 3. → `Other/bit-tricks.cpp`
 - N is a sum of K powers of two (repeats allowed) **iff popcount(N) ≤ K ≤ N**.
+
+## Games (Grundy)
+
+- Grundy number of a position = **mex of the Grundy numbers of positions reachable in one move**. Position is LOSING for the player to move **iff g = 0**. Compute by memoized DFS over the game graph.
+- **Sum of independent games** (each turn: move in exactly ONE component): total g = **XOR of the components' g** — losing iff the XOR is 0. This is why single-game Grundy tables solve multi-pile problems.
+- **Nim** (take any amount from one pile): g(pile of n) = n → first player wins iff XOR of piles ≠ 0. Winning move: pick a pile where `p ^ total < p`, shrink it to `p ^ total`.
+- Subtraction game (take 1..k): **g(n) = n mod (k+1)**. Unknown small game? **Brute-force g(n) for n ≤ 60 and look for the period** — most simple games are eventually periodic.
+- **Misère nim** (who takes last LOSES): play exactly like normal nim, EXCEPT when every pile has size 1 — then first wins iff the number of piles is **even**.
+- **Staircase nim** (move stones one step down a staircase): only stones on **odd steps** matter — XOR those pile sizes.
+- No Grundy needed if you can find a **mirroring/pairing strategy**: copy the opponent's move in the symmetric half — proves a win without any computation. Also try "strategy stealing" for existence proofs.
+
+## Expected value
+
+- **Linearity of expectation**: E[X+Y] = E[X] + E[Y] — **works even when dependent**. The main move: write the target as a sum of 0/1 indicators, then E[total] = Σ P(indicator = 1). ("Expected # of visible towers / inversions / adjacent equal pairs...")
+- Nonnegative integer X: **E[X] = Σ P(X ≥ k), k = 1, 2, ...** — often much easier than finding the full distribution ("expected number of rounds survived").
+- Waiting times: success probability p → expected tries = **1/p**. **Coupon collector**: expected draws to see all n types = n·(1 + 1/2 + ... + 1/n) ≈ n ln n.
+- k independent uniform [0,1]: **E[min] = 1/(k+1), E[max] = k/(k+1)**, i-th smallest = i/(k+1). Same fractions for "k random cuts of a stick".
+- Random permutation of n: expected **fixed points = 1** (any n!), expected **# cycles = 1 + 1/2 + ... + 1/n**, P(two given elements share a cycle) = **1/2**.
+- Random process with states → set unknowns E[state] = expected steps to finish, write one linear equation per state, solve: telescoping for chains/lines, **Gaussian elimination** for ≤ a few hundred states.
+- **Gambler's ruin** (fair ±1 walk from i, absorbing at 0 and n): P(reach n first) = **i/n**; expected steps = **i·(n−i)**.
 
 ## Misc
 
