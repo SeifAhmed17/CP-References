@@ -85,7 +85,7 @@ class MO_With_Rollbacks {
 
                     // brute force: for (int j=l; j<=r; j++) add(j);
 
-                    answer[iq] = ret;
+                    answer[iq] = ans;
 
                     // rollback();  (undo ALL of it — set checkpoint=0 before, or loop-pop)
 
