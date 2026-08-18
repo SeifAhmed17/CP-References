@@ -77,6 +77,7 @@ Quick facts that solve or unlock problems. (Code lives in the folders; see READM
 - "Count subarrays with sum/xor = k" → **prefix + hashmap**: `pre[r] − pre[l−1] = k` means look up `pre[r] − k` among earlier prefixes (xor: `pre[r] ^ k`).
 - Window property **monotonic** (adding elements only hurts / only helps) → **two pointers** instead of binary search per position.
 - "Sum of f over ALL subarrays/pairs" → flip to **per-element contribution**: a[i] sits in (i+1)·(n−i) subarrays; count how often each element/bit/pair is counted instead of iterating objects.
+- Same flip for **subsets**: each element lies in **2^(n−1)** of the 2^n subsets → sum of sizes over all subsets = **n·2^(n−1)**; each PAIR lies in 2^(n−2) (Σ over subsets of #pairs = C(n,2)·2^(n−2)), and so on — "sum of f over all subsets" usually collapses to one closed form per element/pair.
 - "Count pairs (i, j) with condition" → sort + two pointers, or sweep left→right holding earlier elements in a Fenwick over values (inversions pattern).
 - Answer is min/max cost with weird operations → hunt for an **invariant** first (sum mod k, parity, coloring) — it gives impossibility proofs AND constructions.
 - Operations look irreversible → **reverse the process** (deletions become insertions, run queries backwards, last move first).
