@@ -86,6 +86,7 @@ Quick facts that solve or unlock problems. (Code lives in the folders; see READM
 
 - Range ADD, values read only at the end → **difference array**: `d[l] += x, d[r+1] −= x`, prefix at the end. 2D: ±x at the 4 corners, 2D prefix.
 - "Max number of overlapping intervals" → **events**: +1 at l, −1 at r+1, running maximum of the prefix sum.
+- "Sum of max (or max−min) over ALL subarrays" → per-element: a[i] is the max of **(i−L)·(R−i)** subarrays, L/R = nearest greater neighbors via monotonic stack, O(n). **Duplicates**: strict compare on one side, ≥ on the other — else equal maxima get counted twice/zero times. Do max and min in separate passes, subtract.
 - **# distinct values in range** without Mo: offline, sort queries by r; sweep r with a Fenwick: +1 at position of value, −1 at its previous occurrence; answer = sum over [l, r].
 - Online too hard? Almost every query problem collapses **offline**: sort queries by r / by value / by block and sweep. ("edges with weight ≤ X connect u,v?" → sort both, grow a DSU.)
 - Frequencies + √ threshold: values occurring > √n times number ≤ √n ("heavy") — brute-force the heavy ones, bound the light ones per group.
